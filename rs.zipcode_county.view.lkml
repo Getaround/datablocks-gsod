@@ -4,19 +4,24 @@
 view: rs_zipcode_county {
   derived_table: {
     persist_for: "10000 hours"
-    distribution_style: all
     sql:
-      SELECT zcta5, rpad(state, 2, '0'), rpad(geoid, 5, '0') as county_code  FROM
-      (select *,
-        ROW_NUMBER() OVER (PARTITION BY zcta5 ORDER BY ZPOPPCT DESC) row_num
-      from datablocks_spectrum.zcta_county_map)
-      where row_num = 1;;
+      SELECT
+      zcta5 as zipcode,
+      rpad(state, 2, '0') as state_code,
+      rpad(geoid, 5, '0') as county_code
+      FROM
+      (SELECT *,
+       ROW_NUMBER() OVER (PARTITION BY zcta5 ORDER BY ZPOPPCT DESC) row_num
+       FROM datablocks_gsod.zcta_county_map
+      ) AS x
+      WHERE row_num = 1;;
+    indexes: ["zipcode"]
   }
 
   dimension: zipcode {
     primary_key: yes
     hidden: yes
-    sql: ${TABLE}.ZCTA5::varchar;;
+    sql: ${TABLE}.ZCTA5::text ;;
     type: zipcode
   }
 
@@ -24,14 +29,14 @@ view: rs_zipcode_county {
     group_label: "State"
     hidden: yes
     type: string
-    sql: ${TABLE}.state ;;
+    sql: ${TABLE}.state_code ;;
   }
 
   dimension: county_code {
     group_label: "County"
     map_layer_name: us_counties_fips
     type: string
-    sql: ${TABLE}.county_code;;
+    sql: ${TABLE}.county_code ;;
   }
 
   measure: count {

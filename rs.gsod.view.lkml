@@ -1,5 +1,5 @@
 view: rs_gsod {
-  sql_table_name: datablocks_spectrum.gsod ;;
+  sql_table_name: datablocks_gsod.gsod ;;
 
   dimension: station_id {
     type: string
