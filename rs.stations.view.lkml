@@ -7,20 +7,42 @@ view: rs_stations {
     sql: CASE WHEN ${TABLE}.wban = '99999' THEN ${TABLE}.usaf ELSE ${TABLE}.wban END;;
   }
 
-  dimension_group: time_begin_at {
+  dimension_group: time_begin_at_local {
     type: time
+    timeframes: [
+      date,
+      week,
+      month,
+      quarter,
+      day_of_week,
+      day_of_week_index,
+      day_of_month,
+      year,
+      week_of_year,
+      month_num,
+      quarter_of_year
+    ]
+    sql: ${TABLE}.begin ;;
     convert_tz: no
-    timeframes: [year, month, date]
-    ## Needs to be updated
-    sql: PARSE_DATE('%Y%m%d', ${TABLE}.begin) ;;
   }
 
-  dimension_group: time_end_at {
+  dimension_group: time_end_at_local {
     type: time
-    timeframes: [year, month, date]
+    timeframes: [
+      date,
+      week,
+      month,
+      quarter,
+      day_of_week,
+      day_of_week_index,
+      day_of_month,
+      year,
+      week_of_year,
+      month_num,
+      quarter_of_year
+    ]
+    sql: ${TABLE}.end ;;
     convert_tz: no
-    ## Needs to be updated
-    sql: PARSE_DATE('%Y%m%d', ${TABLE}.end) ;;
   }
 
   dimension: call {

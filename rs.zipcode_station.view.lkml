@@ -5,7 +5,7 @@ view: rs_zipcode_station {
       type: string
       primary_key: yes
       hidden: yes
-      sql: ${zipcode} ||  ${TABLE}.year::text ;;
+      sql: ${zipcode} ||  ${TABLE}.year ;;
     }
 
     dimension: zipcode {

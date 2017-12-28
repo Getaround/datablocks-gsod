@@ -10,7 +10,7 @@ view: rs_gsod {
     hidden: yes
     primary_key: yes
     type: string
-    sql: ${TABLE}.stn || ${TABLE}.wban || ${time_weather_date}::text ;;
+    sql: ${TABLE}.stn || ${TABLE}.wban || ${time_weather_at_local_date}::text ;;
   }
 
   dimension: windspeed {
@@ -19,9 +19,21 @@ view: rs_gsod {
     sql: ${TABLE}.wdsp ;;
   }
 
-  dimension_group: time_weather {
+  dimension_group: time_weather_at_local {
     type: time
-    timeframes: [date, month, month_name, year]
+    timeframes: [
+        date,
+        week,
+        month,
+        quarter,
+        day_of_week,
+        day_of_week_index,
+        day_of_month,
+        year,
+        week_of_year,
+        month_num,
+        quarter_of_year
+      ]
     sql: to_timestamp(${TABLE}.year || '-' || ${month} || '-' || ${day}, 'YYYY-MM-DD');;
     convert_tz: no
   }
