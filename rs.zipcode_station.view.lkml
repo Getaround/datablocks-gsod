@@ -5,7 +5,7 @@ view: rs_zipcode_station {
       type: string
       primary_key: yes
       hidden: yes
-      sql: ${zipcode} ||  ${year} ;;
+      sql: ${zipcode}::text ||  ${TABLE}.year::text ;;
     }
 
     dimension: zipcode {
@@ -13,7 +13,7 @@ view: rs_zipcode_station {
       label: "ZIP (ZCTA)"
       type: zipcode
       map_layer_name: us_zipcode_tabulation_areas
-      sql: RPAD(${TABLE}.zip_code::varchar, 5, '0') ;;
+      sql: RPAD(${TABLE}.zip_code::text, 5, '0') ;;
     }
 
     dimension: nearest_station_id {
@@ -24,8 +24,8 @@ view: rs_zipcode_station {
 
     dimension: year {
       hidden: yes
-      type: string
-      sql: ${TABLE}.year::varchar ;;
+      type: number
+      sql: ${TABLE}.year ;;
     }
 
     dimension: distance_from_nearest_station {

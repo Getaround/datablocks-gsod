@@ -3,26 +3,14 @@ view: rs_gsod {
 
   dimension: station_id {
     type: string
-    sql: CASE WHEN ${wban} = '99999' THEN ${station} ELSE ${wban} END;;
+    sql: CASE WHEN ${TABLE}.wban = '99999' THEN ${TABLE}.stn ELSE ${TABLE}.wban END;;
   }
 
   dimension: primary_key {
     hidden: yes
     primary_key: yes
     type: string
-    sql: cast(${station} as string) ||  ${wban} || cast(${weather_date} as string) ;;
-  }
-
-  dimension: station {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.stn ;;
-  }
-
-  dimension: wban {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.wban ;;
+    sql: ${TABLE}.stn::text || ${TABLE}.wban::text || ${time_weather_date}::text ;;
   }
 
   dimension: windspeed {
@@ -31,12 +19,7 @@ view: rs_gsod {
     sql: ${TABLE}.wdsp ;;
   }
 
-  dimension: year {
-    type: string
-    sql: ${TABLE}.year ;;
-  }
-
-  dimension_group: weather {
+  dimension_group: time_weather {
     type: time
     timeframes: [date, month, month_name, year]
     sql: to_timestamp(${TABLE}.year || '-' || ${month} || '-' || ${day}, 'YYYY-MM-DD');;
@@ -117,37 +100,37 @@ view: rs_gsod {
   dimension: rain_drizzle {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.rain_drizzle = '1' ;;
+    sql: ${TABLE}.rain_drizzle = 1 ;;
   }
 
   dimension: fog {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.fog = '1';;
+    sql: ${TABLE}.fog = 1 ;;
   }
 
   dimension: hail {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.hail = '1' ;;
+    sql: ${TABLE}.hail = 1 ;;
   }
 
   dimension: snow_ice_pellets {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.snow_ice_pellets = '1' ;;
+    sql: ${TABLE}.snow_ice_pellets = 1 ;;
   }
 
   dimension: thunder {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.thunder = '1';;
+    sql: ${TABLE}.thunder = 1 ;;
   }
 
   dimension: tornado_funnel_cloud {
     group_label: "Event Occurrence"
     type: yesno
-    sql: ${TABLE}.tornado_funnel_cloud = '1' ;;
+    sql: ${TABLE}.tornado_funnel_cloud = 1 ;;
   }
 
   dimension: sea_level_pressure {
@@ -202,16 +185,21 @@ view: rs_gsod {
     type: count
 
   }
+  dimension: year {
+    hidden: yes
+    type: number
+    sql: ${TABLE}.year ;;
+  }
 
   dimension: month {
     hidden: yes
-    type: string
+    type: number
     sql: ${TABLE}.mo ;;
   }
 
   dimension: day {
     hidden: yes
-    type: string
+    type: number
     sql: ${TABLE}.da ;;
   }
 

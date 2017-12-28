@@ -4,22 +4,10 @@ view: rs_stations {
   dimension: station_id {
     primary_key: yes
     type: string
-    sql: CASE WHEN ${wban} = '99999' THEN ${usaf} ELSE ${wban} END;;
+    sql: CASE WHEN ${TABLE}.wban = '99999' THEN ${TABLE}.usaf ELSE ${TABLE}.wban END;;
   }
 
-  dimension: usaf {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.usaf ;;
-  }
-
-  dimension: wban {
-    hidden: yes
-    type: string
-    sql: ${TABLE}.wban ;;
-  }
-
-  dimension_group: begin {
+  dimension_group: time_begin_at {
     type: time
     convert_tz: no
     timeframes: [year, month, date]
@@ -27,12 +15,12 @@ view: rs_stations {
     sql: PARSE_DATE('%Y%m%d', ${TABLE}.begin) ;;
   }
 
-  dimension_group: end {
+  dimension_group: time_end_at {
     type: time
     timeframes: [year, month, date]
     convert_tz: no
     ## Needs to be updated
-    sql: PARSE_DATE('%Y%m%d', ${TABLE}.`end`) ;;
+    sql: PARSE_DATE('%Y%m%d', ${TABLE}.end) ;;
   }
 
   dimension: call {

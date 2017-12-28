@@ -6,7 +6,7 @@ view: rs_zipcode_county {
     persist_for: "10000 hours"
     sql:
       SELECT
-      zcta5 as zipcode,
+      RPAD(zcta5::text, 5, '0') as zipcode,
       rpad(state, 2, '0') as state_code,
       rpad(geoid, 5, '0') as county_code
       FROM
@@ -21,7 +21,7 @@ view: rs_zipcode_county {
   dimension: zipcode {
     primary_key: yes
     hidden: yes
-    sql: ${TABLE}.ZCTA5::text ;;
+    sql: ${TABLE}.zipcode ;;
     type: zipcode
   }
 
