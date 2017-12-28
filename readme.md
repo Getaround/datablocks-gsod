@@ -17,21 +17,26 @@ Check out our [**Blocks Directory**](https://looker.com/platform/blocks/director
 
 CREATE table datablocks_gsod.zipcode
 (
-  zip_code integer,
+  zip_code text,
   latitude numeric,
   longitude numeric,
   city text,
   state text,
   county text
 );
+ALTER TABLE datablocks_gsod.zipcode ADD PRIMARY KEY (zip_code);
+
 
 CREATE table datablocks_gsod.zipcode_station
 (
-  zip_code integer,
+  zip_code text,
   year integer,
   nearest_station_id text,
   distance_from_nearest_station numeric
 );
+ALTER TABLE datablocks_gsod.zipcode_station ADD PRIMARY KEY (zip_code, year);
+CREATE INDEX nearest_station_id_idx ON datablocks_gsod.zipcode_station (nearest_station_id);
+
 
 CREATE table datablocks_gsod.zcta_county_map
 (
@@ -61,6 +66,7 @@ CREATE table datablocks_gsod.zcta_county_map
   coarealandpct numeric
 );
 
+
 CREATE table datablocks_gsod.stations
 (
   usaf text,
@@ -74,8 +80,9 @@ CREATE table datablocks_gsod.stations
   elev text,
   begin timestamp with time zone,
   "end" timestamp with time zone
-)
-;
+);
+ALTER TABLE datablocks_gsod.stations ADD PRIMARY KEY (usaf, wban);
+
 
 CREATE table datablocks_gsod.gsod
 (
@@ -112,4 +119,7 @@ CREATE table datablocks_gsod.gsod
   thunder smallint,
   tornado_funnel_cloud smallint
 );
+ALTER TABLE datablocks_gsod.gsod ADD PRIMARY KEY (stn, wban, year, mo, da);
+
+
 ```

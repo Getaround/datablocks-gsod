@@ -10,7 +10,7 @@ view: rs_gsod {
     hidden: yes
     primary_key: yes
     type: string
-    sql: ${TABLE}.stn::text || ${TABLE}.wban::text || ${time_weather_date}::text ;;
+    sql: ${TABLE}.stn || ${TABLE}.wban || ${time_weather_date}::text ;;
   }
 
   dimension: windspeed {
